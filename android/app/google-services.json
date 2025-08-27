@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "842062470569",
+    "project_id": "learning-flutter-bfi-b2453",
+    "storage_bucket": "learning-flutter-bfi-b2453.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:842062470569:android:dea09f21643f87ed4038b8",
+        "android_client_info": {
+          "package_name": "com.example.learningdart"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBoaUWA_MSiDxwQOqB_LpaaggQDJaipNjo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
