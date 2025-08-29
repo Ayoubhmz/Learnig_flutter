@@ -36,70 +36,81 @@ class _LoginViewState extends State<LoginView> {
 
    @override
   Widget build(BuildContext context) {
-    return Column(
-          children: [
-            TextField(
-              controller: _emailController,
-              keyboardType: TextInputType.emailAddress,
-              enableSuggestions: false,
-              autocorrect: false,
-              decoration: const InputDecoration(
-                hintText: 'Email',
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Login'),
+      ),
+      body: Column(
+            children: [
+              TextField(
+                controller: _emailController,
+                keyboardType: TextInputType.emailAddress,
+                enableSuggestions: false,
+                autocorrect: false,
+                decoration: const InputDecoration(
+                  hintText: 'Email',
+                ),
               ),
-            ),
-            TextField(
-              controller: _passwordController,
-              obscureText: true,
-              enableSuggestions: false,
-              autocorrect: false,
-              decoration: const InputDecoration(
-                hintText: 'Password',
+              TextField(
+                controller: _passwordController,
+                obscureText: true,
+                enableSuggestions: false,
+                autocorrect: false,
+                decoration: const InputDecoration(
+                  hintText: 'Password',
+                ),
               ),
-            ),
-            TextButton(
-              onPressed: () async {
-                final email = _emailController.text;
-                final password = _passwordController.text;
-                try {
-                  final userCredential = await FirebaseAuth.instance
-                      .signInWithEmailAndPassword(
-                    email: email,
-                    password: password,
-                  );
-                  print('Signed in: ${userCredential.user?.email}');
-                  print(userCredential.user);
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(
-                      content: Text('Signed in: ${userCredential.user?.email}'),
-                    ),
-                  );
-                } on FirebaseAuthException catch (e) {
-                  // Print the raw code so you can see what the platform returns
-                  print('FirebaseAuthException code: ${e.code}, message: ${e.message}');
-                  // Handle common variants (web may use 'auth/wrong-password')
-                  if (e.code == 'user-not-found' || e.code == 'auth/user-not-found') {
-                    const msg = 'No user found for that email.';
-                    print(msg);
-                    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text(msg)));
-                  } else if (e.code == 'wrong-password' || e.code == 'auth/wrong-password') {
-                    const msg = 'Wrong password provided for that user.';
-                    print(msg);
-                    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text(msg)));
-                  } else {
-                    final msg = 'Authentication failed: ${e.code}';
-                    print(msg);
-                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(msg)));
+              TextButton(
+                onPressed: () async {
+                  final email = _emailController.text;
+                  final password = _passwordController.text;
+                  try {
+                    final userCredential = await FirebaseAuth.instance
+                        .signInWithEmailAndPassword(
+                      email: email,
+                      password: password,
+                    );
+                    print('Signed in: ${userCredential.user?.email}');
+                    print(userCredential.user);
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content: Text('Signed in: ${userCredential.user?.email}'),
+                      ),
+                    );
+                  } on FirebaseAuthException catch (e) {
+                    // Print the raw code so you can see what the platform returns
+                    print('FirebaseAuthException code: ${e.code}, message: ${e.message}');
+                    // Handle common variants (web may use 'auth/wrong-password')
+                    if (e.code == 'user-not-found' || e.code == 'auth/user-not-found') {
+                      const msg = 'No user found for that email.';
+                      print(msg);
+                      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text(msg)));
+                    } else if (e.code == 'wrong-password' || e.code == 'auth/wrong-password') {
+                      const msg = 'Wrong password provided for that user.';
+                      print(msg);
+                      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text(msg)));
+                    } else {
+                      final msg = 'Authentication failed: ${e.code}';
+                      print(msg);
+                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(msg)));
+                    }
+                  } catch (e) {
+                    // Catch any other errors and surface them
+                    print('Unexpected error during sign in: $e');
+                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Error: $e')));
                   }
-                } catch (e) {
-                  // Catch any other errors and surface them
-                  print('Unexpected error during sign in: $e');
-                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Error: $e')));
-                }
-              },
-              child: const Text('Login'),
-            ),
-          ],
-        );
+                },
+                child: const Text('Login'),
+              ),
+              TextButton(
+                onPressed: () {
+                  Navigator.of(context).pushNamedAndRemoveUntil('/register/' , (route) => false);
+                },
+                child: const Text('Not registered yet? Register here!'),
+              ),
+            ],
+          ),
+    );
   }
 
   
