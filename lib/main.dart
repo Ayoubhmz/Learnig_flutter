@@ -8,6 +8,7 @@ import 'package:learningdart/views/login_view.dart';
 import 'package:learningdart/views/notes_view.dart';
 import 'package:learningdart/views/register_view.dart';
 import 'package:learningdart/views/verifyEmail_view.dart';
+import 'dart:developer' as devtools show log;
 
 
 
@@ -48,7 +49,7 @@ class HomePage extends StatelessWidget {
               final user = FirebaseAuth.instance.currentUser;
               if (user!= null) {
                 if (user.emailVerified) {
-                  print('User is logged in and email is verified');
+                  devtools.log('User is logged in and email is verified');
                   return const NotesView();
                 } else {
                   return const VerifyEmailView();

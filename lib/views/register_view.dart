@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:learningdart/firebase_options.dart';
+import 'dart:developer' as devtools show log;
 
 class RegisterView extends StatefulWidget {
   const RegisterView({super.key});
@@ -66,12 +67,12 @@ class _RegisterViewState extends State<RegisterView> {
                       email: email,
                       password: password,
                   );
-                  print('User registered: $userCredential');
+                  devtools.log('User registered: $userCredential');
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(content: Text('Registered: ${userCredential.user?.email}')),
                   );
                 } on FirebaseAuthException catch (e) {
-                  print('FirebaseAuthException code: ${e.code}, message: ${e.message}');
+                  devtools.log('FirebaseAuthException code: ${e.code}, message: ${e.message}');
                   if (e.code == 'weak-password' || e.code == 'auth/weak-password') {
                     const msg = 'The password provided is too weak.';
                     ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text(msg)));
@@ -83,7 +84,7 @@ class _RegisterViewState extends State<RegisterView> {
                     ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(msg)));
                   }
                 } catch (e) {
-                  print('Exception: $e');
+                  devtools.log('Exception: $e');
                   ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Error: $e')));
                 }
                   

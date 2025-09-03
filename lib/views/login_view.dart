@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 import '../firebase_options.dart';
+import 'dart:developer' as devtools show log;
 
 
 class LoginView extends StatefulWidget {
@@ -70,8 +71,8 @@ class _LoginViewState extends State<LoginView> {
                       email: email,
                       password: password,
                     );
-                    print('Signed in: ${userCredential.user?.email}');
-                    print(userCredential.user);
+                    devtools.log('Signed in: ${userCredential.user?.email}');
+                    devtools.log((userCredential.user).toString());
                     ScaffoldMessenger.of(context).showSnackBar(
                       SnackBar(
                         content: Text('Signed in: ${userCredential.user?.email}'),
@@ -84,24 +85,24 @@ class _LoginViewState extends State<LoginView> {
                     }
                   } on FirebaseAuthException catch (e) {
                     // Print the raw code so you can see what the platform returns
-                    print('FirebaseAuthException code: ${e.code}, message: ${e.message}');
+                    devtools.log('FirebaseAuthException code: ${e.code}, message: ${e.message}');
                     // Handle common variants (web may use 'auth/wrong-password')
                     if (e.code == 'user-not-found' || e.code == 'auth/user-not-found') {
                       const msg = 'No user found for that email.';
-                      print(msg);
+                      devtools.log(msg);
                       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text(msg)));
                     } else if (e.code == 'wrong-password' || e.code == 'auth/wrong-password') {
                       const msg = 'Wrong password provided for that user.';
-                      print(msg);
+                      devtools.log(msg);
                       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text(msg)));
                     } else {
                       final msg = 'Authentication failed: ${e.code}';
-                      print(msg);
+                      devtools.log(msg);
                       ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(msg)));
                     }
                   } catch (e) {
                     // Catch any other errors and surface them
-                    print('Unexpected error during sign in: $e');
+                    devtools.log('Unexpected error during sign in: $e');
                     ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Error: $e')));
                   }
                 },
