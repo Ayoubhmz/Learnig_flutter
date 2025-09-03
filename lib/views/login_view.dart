@@ -77,6 +77,11 @@ class _LoginViewState extends State<LoginView> {
                         content: Text('Signed in: ${userCredential.user?.email}'),
                       ),
                     );
+                    if (!userCredential.user!.emailVerified) {
+                      Navigator.of(context).pushNamedAndRemoveUntil('/verifyEmail/' , (route) => false);
+                    } else {
+                      Navigator.of(context).pushNamedAndRemoveUntil('/notes/' , (route) => false);
+                    }
                   } on FirebaseAuthException catch (e) {
                     // Print the raw code so you can see what the platform returns
                     print('FirebaseAuthException code: ${e.code}, message: ${e.message}');

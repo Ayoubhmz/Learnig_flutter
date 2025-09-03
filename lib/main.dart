@@ -5,6 +5,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:learningdart/firebase_options.dart';
 import 'package:learningdart/views/login_view.dart';
+import 'package:learningdart/views/notes_view.dart';
 import 'package:learningdart/views/register_view.dart';
 import 'package:learningdart/views/verifyEmail_view.dart';
 
@@ -25,6 +26,7 @@ void main() {
         '/register/': (context) => const RegisterView(),
         '/login/': (context) => const LoginView(),
         '/verifyEmail/': (context) => const VerifyEmailView(),
+        '/notes/': (context) => const NotesView(),
       },
 
     )
@@ -47,19 +49,24 @@ class HomePage extends StatelessWidget {
               if (user!= null) {
                 if (user.emailVerified) {
                   print('User is logged in and email is verified');
+                  return const NotesView();
                 } else {
                   return const VerifyEmailView();
                 }
               } else {
                 return const RegisterView();
               }
-              return const Text('Done');             
+              return const LoginView();            
             default:
               return const CircularProgressIndicator();
           }
         },  
       );
   }
+}
+
+enum MenuAction {
+  logout,
 }
 
 
