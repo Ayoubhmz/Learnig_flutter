@@ -1,11 +1,10 @@
 
 // ignore_for_file: avoid_print, use_build_context_synchronously
 
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:learningdart/utilities/show_error_dialog.dart';
 
-import '../firebase_options.dart';
 import 'dart:developer' as devtools show log;
 
 
@@ -90,20 +89,32 @@ class _LoginViewState extends State<LoginView> {
                     if (e.code == 'user-not-found' || e.code == 'auth/user-not-found') {
                       const msg = 'No user found for that email.';
                       devtools.log(msg);
-                      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text(msg)));
+                      await showErrorDialog(
+                        context,
+                        msg,
+                        );
                     } else if (e.code == 'wrong-password' || e.code == 'auth/wrong-password') {
                       const msg = 'Wrong password provided for that user.';
                       devtools.log(msg);
-                      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text(msg)));
+                      await showErrorDialog(
+                        context,
+                        msg,
+                      );
                     } else {
                       final msg = 'Authentication failed: ${e.code}';
                       devtools.log(msg);
-                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(msg)));
+                      await showErrorDialog(
+                        context,
+                        msg,
+                      );
                     }
                   } catch (e) {
                     // Catch any other errors and surface them
                     devtools.log('Unexpected error during sign in: $e');
-                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Error: $e')));
+                    await showErrorDialog(
+                      context,
+                      'An unexpected error occurred. Please try again.',
+                    );
                   }
                 },
                 child: const Text('Login'),
@@ -118,8 +129,5 @@ class _LoginViewState extends State<LoginView> {
           ),
     );
   }
-
-  
-
- 
 }
+
