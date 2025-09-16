@@ -1,8 +1,12 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:learningdart/firebase_options.dart';
 import 'dart:developer' as devtools show log;
+
+import 'package:learningdart/utilities/show_error_dialog.dart';
 
 class RegisterView extends StatefulWidget {
   const RegisterView({super.key});
@@ -61,27 +65,33 @@ class _RegisterViewState extends State<RegisterView> {
                 onPressed: () async {
                   final email = _emailController.text;
                   final password = _passwordController.text;
-                  try {
-                  final userCredential = 
+                  try { 
                     await FirebaseAuth.instance.createUserWithEmailAndPassword(
                       email: email,
                       password: password,
                   );
-                  devtools.log('User registered: $userCredential');
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(content: Text('Registered: ${userCredential.user?.email}')),
-                  );
+                  final user = FirebaseAuth.instance.currentUser;
+                  await user?.sendEmailVerification();
+                  Navigator.of(context).pushNamed('/verifyEmail/');
                 } on FirebaseAuthException catch (e) {
-                  devtools.log('FirebaseAuthException code: ${e.code}, message: ${e.message}');
                   if (e.code == 'weak-password' || e.code == 'auth/weak-password') {
                     const msg = 'The password provided is too weak.';
-                    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text(msg)));
+                    await showErrorDialog(
+                        context,
+                        msg,
+                        );
                   } else if (e.code == 'email-already-in-use' || e.code == 'auth/email-already-in-use') {
                     const msg = 'The account already exists for that email.';
-                    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text(msg)));
+                    await showErrorDialog(
+                        context,
+                        msg,
+                        );
                   } else {
                     final msg = 'Authentication error: ${e.code}';
-                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(msg)));
+                    await showErrorDialog(
+                        context,
+                        msg,
+                        );
                   }
                 } catch (e) {
                   devtools.log('Exception: $e');
