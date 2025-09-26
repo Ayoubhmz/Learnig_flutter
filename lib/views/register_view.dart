@@ -1,5 +1,7 @@
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:learningdart/services/auth/auth_service.dart';
 import 'dart:developer' as devtools show log;
 
 import 'package:learningdart/utilities/show_error_dialog.dart';
@@ -137,12 +139,11 @@ class _RegisterViewState extends State<RegisterView> {
                             });
                   
                             try {
-                              await FirebaseAuth.instance.createUserWithEmailAndPassword(
+                              await AuthService.firebase().createUser(
                                 email: email,
                                 password: password,
                               );
-                              final user = FirebaseAuth.instance.currentUser;
-                              await user?.sendEmailVerification();
+                              await AuthService.firebase().sendEmailVerification();
                               if (!mounted) return;
                               Navigator.of(context).pushNamed('/verifyEmail/');
                             } on FirebaseAuthException catch (e) {

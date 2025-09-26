@@ -1,8 +1,9 @@
 
 // ignore_for_file: avoid_print, use_build_context_synchronously
 
-import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';
+import 'package:learningdart/services/auth/auth_service.dart';
 import 'package:learningdart/utilities/show_error_dialog.dart';
 
 import 'dart:developer' as devtools show log;
@@ -19,7 +20,7 @@ class _LoginViewState extends State<LoginView> {
   late final TextEditingController _emailController;
   late final TextEditingController _passwordController;
   bool _obscurePassword = true;
-  bool _isLoading = false;
+  bool _isLoading = false;  
 
 
   @override
@@ -110,14 +111,13 @@ class _LoginViewState extends State<LoginView> {
                             }
                             setState(() => _isLoading = true);
                             try {
-                              final userCredential = await FirebaseAuth.instance.signInWithEmailAndPassword(
+                              final userCredential = await AuthService.firebase().logIn(
                                 email: email,
                                 password: password,
                               );
-                              devtools.log('Signed in: ${userCredential.user?.email}');
-                              devtools.log('is Email verified ?${userCredential.user?.emailVerified}');
-                              final user = FirebaseAuth.instance.currentUser;
-                              if (user?.emailVerified == false) {
+                              devtools.log('is Email verified ?${userCredential.isEmailVerified}');
+                              final user = AuthService.firebase().currentUser;
+                              if (user?.isEmailVerified == false) {
                                 Navigator.of(context).pushNamedAndRemoveUntil('/verifyEmail/' , (route) => false);
                               } else {
                                 Navigator.of(context).pushNamedAndRemoveUntil('/notes/' , (route) => false);

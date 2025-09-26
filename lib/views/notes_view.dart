@@ -1,10 +1,10 @@
 // ignore_for_file: use_build_context_synchronously
 
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/src/widgets/placeholder.dart';
+import 'package:learningdart/enums/menu_action.dart';
+import 'package:learningdart/services/auth/auth_service.dart';
 
 import '../main.dart';
 import 'dart:developer' as devtools show log;
@@ -32,7 +32,7 @@ class _NotesViewState extends State<NotesView> {
                   final shouldLogOut = await showLogOutDialog(context);
                   devtools.log(shouldLogOut.toString());
                   if (shouldLogOut) {
-                    await FirebaseAuth.instance.signOut();
+                    await AuthService.firebase().logOut();
                     Navigator.of(context).pushNamedAndRemoveUntil(
                       '/login/' ,
                       (route) => false,

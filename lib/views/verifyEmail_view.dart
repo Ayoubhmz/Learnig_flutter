@@ -1,7 +1,9 @@
-import 'package:firebase_auth/firebase_auth.dart';
+
 import 'package:flutter/material.dart';
 import 'dart:async';
 import 'dart:developer' as devtools show log;
+
+import 'package:learningdart/services/auth/auth_service.dart';
 class VerifyEmailView extends StatefulWidget {
   const VerifyEmailView({super.key});
 
@@ -42,7 +44,7 @@ class __VerifyEmailViewState extends State<VerifyEmailView> {
   }
 
   Widget build(BuildContext context) {
-    final user = FirebaseAuth.instance.currentUser;
+    final user = AuthService.firebase().currentUser;
     final email = user?.email ?? '';
 
     return Scaffold(
@@ -96,8 +98,7 @@ class __VerifyEmailViewState extends State<VerifyEmailView> {
                                 _isSending = true;
                               });
                               try {
-                                final u = FirebaseAuth.instance.currentUser;
-                                await u?.sendEmailVerification();
+                                await AuthService.firebase().sendEmailVerification();
                                 devtools.log('Email verification sent');
                                 if (!mounted) return;
                                 ScaffoldMessenger.of(context).showSnackBar(
@@ -162,7 +163,7 @@ class __VerifyEmailViewState extends State<VerifyEmailView> {
                                 _isSigningOut = true;
                               });
                               try {
-                                await FirebaseAuth.instance.signOut();
+                                await AuthService.firebase().logOut();
                                 if (!mounted) return;
                                 Navigator.of(context).pushNamedAndRemoveUntil('/register/', (route) => false);
                               } catch (e) {
