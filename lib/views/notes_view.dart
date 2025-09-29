@@ -1,15 +1,11 @@
 // ignore_for_file: use_build_context_synchronously
 
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:flutter/src/widgets/placeholder.dart';
 import 'package:learningdart/enums/menu_action.dart';
 import 'package:learningdart/services/auth/auth_service.dart';
 
-import '../main.dart';
 import 'dart:developer' as devtools show log;
 
-import 'login_view.dart';
 
 class NotesView extends StatefulWidget {
   const NotesView({super.key});

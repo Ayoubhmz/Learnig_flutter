@@ -1,4 +1,6 @@
 
+// ignore_for_file: file_names
+
 import 'package:flutter/material.dart';
 import 'dart:async';
 import 'dart:developer' as devtools show log;
@@ -43,6 +45,7 @@ class __VerifyEmailViewState extends State<VerifyEmailView> {
     super.dispose();
   }
 
+  @override
   Widget build(BuildContext context) {
     final user = AuthService.firebase().currentUser;
     final email = user?.email ?? '';
@@ -74,7 +77,7 @@ class __VerifyEmailViewState extends State<VerifyEmailView> {
                   Text(
                     'A verification email has been sent to',
                     textAlign: TextAlign.center,
-                    style: Theme.of(context).textTheme.bodyText2,
+                    style: Theme.of(context).textTheme.bodyMedium,
                   ),
                   if (email.isNotEmpty) ...[
                     const SizedBox(height: 6),
